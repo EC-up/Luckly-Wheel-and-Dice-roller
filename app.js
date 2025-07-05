@@ -50,8 +50,29 @@ spinButton.addEventListener('click', () => {
   const randomIndex = Math.floor(Math.random() * entries.length);
 
   let rotation = 0;
+  let accelerationTime = 1000; // 1 second of acceleration
+  let decelerationTime = 2000; // 2 seconds of deceleration
+  let totalRotation = Math.random() * 360; // Random rotation between 0 and 360
+  let startTime = Date.now();
+
   const interval = setInterval(() => {
-    rotation += 5;
+    let elapsed = Date.now() - startTime;
+
+    if (elapsed < accelerationTime) {
+      // Acceleration phase
+      rotation += 5;
+    } else if (elapsed < accelerationTime + decelerationTime) {
+      // Deceleration phase
+      rotation += (decelerationTime - (elapsed - accelerationTime)) / 100;
+    } else {
+      // Stop the wheel
+      clearInterval(interval);
+      setTimeout(() => {
+        alert(`Winner: ${entries[randomIndex]}`);
+        isSpinning = false;
+      }, 500);
+    }
+
     if (rotation >= 360) rotation %= 360;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -61,14 +82,6 @@ spinButton.addEventListener('click', () => {
     ctx.translate(-200, -200);
     drawWheel();
     ctx.restore();
-
-    if (rotation >= (randomIndex * (360 / entries.length)) + 720) {
-      clearInterval(interval);
-      setTimeout(() => {
-        alert(`Winner: ${entries[randomIndex]}`);
-        isSpinning = false;
-      }, 500);
-    }
   }, 16);
 });
 
@@ -105,7 +118,13 @@ languageToggle.addEventListener('click', () => {
     title.textContent = '名字轉盤與骰子滾動';
     spinButton.textContent = '旋轉轉盤';
     nameInput.placeholder = '輸入名字（用逗號分隔）';
-    footerText.textContent = '© 2023 名字轉盤與骰子滾動。保留所有權利。';
+    footerText.innerHTML = `
+      © 2023 名字轉盤與骰子滾動。保留所有權利。<br>
+      <small>
+        我們致力於保護您的隱私並確保數據安全。本項目符合 GDPR、CCPA 等隱私法規。<br>
+        100% 的電力來自可再生能源，其中 93% 為無碳能源。
+      </small>
+    `;
     languageToggle.textContent = '切換到 English';
 
     rollButton.textContent = '滾動骰子';
@@ -114,7 +133,13 @@ languageToggle.addEventListener('click', () => {
     title.textContent = 'Wheel of Names & Dice Roller';
     spinButton.textContent = 'Spin Wheel';
     nameInput.placeholder = 'Enter names (comma-separated)';
-    footerText.textContent = '© 2023 Wheel of Names & Dice Roller. All rights reserved.';
+    footerText.innerHTML = `
+      © 2023 Wheel of Names & Dice Roller. All rights reserved.<br>
+      <small>
+        We are committed to protecting your privacy and securing your data. This project complies with GDPR, CCPA, and other privacy regulations.<br>
+        100% of the electricity that powers this project comes from renewable energy sources, with 93% being carbon-free.
+      </small>
+    `;
     languageToggle.textContent = 'Switch to 中文';
 
     rollButton.textContent = 'Roll Dice';
