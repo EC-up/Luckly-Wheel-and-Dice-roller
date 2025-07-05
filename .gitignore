@@ -1,0 +1,25 @@
+# Logs and temporary files
+*.log
+*.tmp
+
+# Dependency directories (if you add Node.js later)
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Environment variables (if you add backend functionality)
+.env
+.env.local
