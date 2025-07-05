@@ -85,13 +85,14 @@ spinButton.addEventListener('click', () => {
   }, 16);
 });
 
-// Update entries
-nameInput.addEventListener('input', (e) => {
-  entries = e.target.value.split(',').map(name => name.trim()).filter(name => name !== '');
-  drawWheel();
+// Support Enter key for name input
+nameInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    spinButton.click();
+  }
 });
 
-// Roll dice
+// Roll dice and display total sum
 rollButton.addEventListener('click', () => {
   const diceCount = parseInt(diceCountInput.value, 10);
   if (isNaN(diceCount) || diceCount < 1 || diceCount > 6) {
@@ -99,15 +100,23 @@ rollButton.addEventListener('click', () => {
     return;
   }
 
-  diceResultsDiv.innerHTML = ''; // Clear previous results
+  diceResultsDiv.innerHTML = '';
+  let totalSum = 0;
 
   for (let i = 0; i < diceCount; i++) {
-    const diceValue = Math.floor(Math.random() * 6) + 1; // Random number between 1 and 6
+    const diceValue = Math.floor(Math.random() * 6) + 1;
+    totalSum += diceValue;
+
     const diceElement = document.createElement('div');
     diceElement.className = 'dice';
     diceElement.textContent = diceValue;
     diceResultsDiv.appendChild(diceElement);
   }
+
+  // Display total sum
+  const totalSumElement = document.createElement('p');
+  totalSumElement.textContent = `Total: ${totalSum}`;
+  diceResultsDiv.appendChild(totalSumElement);
 });
 
 // Language toggle
@@ -115,26 +124,26 @@ languageToggle.addEventListener('click', () => {
   isChinese = !isChinese;
 
   if (isChinese) {
-    title.textContent = '名字轉盤與骰子滾動';
-    spinButton.textContent = '旋轉轉盤';
-    nameInput.placeholder = '輸入名字（用逗號分隔）';
+    title.textContent = '幸运转盘与骰子滚动';
+    spinButton.textContent = '旋转转盘';
+    nameInput.placeholder = '输入名字（用逗号分隔）';
     footerText.innerHTML = `
-      © 2023 名字轉盤與骰子滾動。保留所有權利。<br>
+      © 2023 幸运转盘与骰子滚动。保留所有权利。<br>
       <small>
-        我們致力於保護您的隱私並確保數據安全。本項目符合 GDPR、CCPA 等隱私法規。<br>
-        100% 的電力來自可再生能源，其中 93% 為無碳能源。
+        我们致力于保护您的隐私并确保数据安全。本项目符合 GDPR、CCPA 等隐私法规。<br>
+        100% 的电力来自可再生能源，其中 93% 为无碳能源。
       </small>
     `;
-    languageToggle.textContent = '切換到 English';
+    languageToggle.textContent = '切换到 English';
 
-    rollButton.textContent = '滾動骰子';
-    diceCountInput.setAttribute('placeholder', '骰子數量 (1-6)');
+    rollButton.textContent = '滚动骰子';
+    diceCountInput.setAttribute('placeholder', '骰子数量 (1-6)');
   } else {
-    title.textContent = 'Wheel of Names & Dice Roller';
+    title.textContent = 'Lucky Wheel & Dice Roller';
     spinButton.textContent = 'Spin Wheel';
     nameInput.placeholder = 'Enter names (comma-separated)';
     footerText.innerHTML = `
-      © 2023 Wheel of Names & Dice Roller. All rights reserved.<br>
+      © 2023 Lucky Wheel & Dice Roller. All rights reserved.<br>
       <small>
         We are committed to protecting your privacy and securing your data. This project complies with GDPR, CCPA, and other privacy regulations.<br>
         100% of the electricity that powers this project comes from renewable energy sources, with 93% being carbon-free.
@@ -146,3 +155,6 @@ languageToggle.addEventListener('click', () => {
     diceCountInput.setAttribute('placeholder', 'Number of Dice (1-6)');
   }
 });
+
+// Initialize the wheel on page load
+drawWheel();
