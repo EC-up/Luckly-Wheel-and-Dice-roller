@@ -92,6 +92,12 @@ nameInput.addEventListener('keypress', (e) => {
   }
 });
 
+// Update entries when input changes
+nameInput.addEventListener('input', (e) => {
+  entries = e.target.value.split(',').map(name => name.trim()).filter(name => name !== '');
+  drawWheel();
+});
+
 // Roll dice and display total sum
 rollButton.addEventListener('click', () => {
   const diceCount = parseInt(diceCountInput.value, 10);
@@ -155,6 +161,9 @@ languageToggle.addEventListener('click', () => {
     diceCountInput.setAttribute('placeholder', 'Number of Dice (1-6)');
   }
 });
+
+// Initialize the wheel on page load
+drawWheel();
 
 // Initialize the wheel on page load
 drawWheel();
